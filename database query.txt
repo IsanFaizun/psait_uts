@@ -1,0 +1,62 @@
+-- QUERY
+-- Buat table
+CREATE TABLE mahasiswa (
+	nim varchar(10) NOT NULL,
+    nama varchar(20),
+    alamat varchar(40),
+    tanggal_lahir date,
+    PRIMARY KEY(nim)
+);
+
+CREATE TABLE matakuliah (
+	kode_mk varchar(10) NOT NULL,
+    nama_mk varchar(20),
+    sks int(2),
+    PRIMARY KEY(kode_mk)
+);
+
+CREATE TABLE perkuliahan (
+	id_perkuliahan int(5) NOT NULL AUTO_INCREMENT,
+    nim varchar(10),
+    kode_mk varchar(10),
+    nilai double,
+    PRIMARY KEY(id_perkuliahan),
+    FOREIGN KEY(nim) REFERENCES mahasiswa(nim),
+    FOREIGN KEY(kode_mk) REFERENCES matakuliah(kode_mk)
+);
+
+-- Insert ke database
+INSERT INTO mahasiswa (nim, nama, alamat, tanggal_lahir) VALUES
+    ('sv_001', 'joko', 'bantul', 1999-12-07),
+    ('sv_002', 'paul', 'sleman', 2000-10-07),
+    ('sv_003', 'andy', 'surabaya', 2000-02-09);
+
+INSERT INTO matakuliah (kode_mk, nama_mk, sks) VALUES
+    ('svpl_001', 'database', 2),
+    ('svpl_002', 'kecerdasan artifisial', 2),
+    ('svpl_003', 'interoperabilitas', 2);
+
+INSERT INTO perkuliahan (nim, kode_mk, nilai) VALUES
+    ('sv_001', 'svpl_001', 90),
+    ('sv_001', 'svpl_002', 87),
+    ('sv_001', 'svpl_003', 88),
+    ('sv_002', 'svpl_001', 98),
+    ('sv_002', 'svpl_002', 77);
+
+-- View Table
+CREATE VIEW data_kuliahan AS
+SELECT 
+    m.nim,
+    m.nama,
+    m.alamat,
+    m.tanggal_lahir,
+    mk.kode_mk,
+    mk.nama_mk,
+    mk.sks,
+    p.nilai
+FROM 
+    mahasiswa m
+JOIN 
+    perkuliahan p ON m.nim = p.nim
+JOIN 
+    matakuliah mk ON p.kode_mk = mk.kode_mk;
